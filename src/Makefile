@@ -1,0 +1,64 @@
+# to jest wersja dla gnu-make
+# wmake ma inne makra niz gnu-make
+# np $< w wmake jest jak $^ w gnu-make
+# a $^ jak $@
+
+# wlink wymaga przecinkow w liscie plikow obj
+# wlink file first.obj,second.obj ...
+# ale mozna tez wlink file first.obj file second.obj ...
+
+#CXX = c:\watcom\binnt\wpp.exe
+CXX = wpp.exe
+LD = wlink.exe
+CXXFLAGS = -0 -bt=dos -bcl=dos -d0 -ms -wx -q -ot -iC:\watcom\h
+# -wx max warnings level
+# -ms memory model small
+# -bt system
+# -0 8088
+# -q quiet
+# -ot optimization: exec. time
+# -d0 no debuging info
+
+LDFLAGS = option quiet form DOS LIBP C:\watcom\lib286;C:\watcom\lib286\dos
+
+all : lorenz.exe vline.exe pages.exe bounce.exe
+
+vline.exe: examples/vline.cpp hercules/hercules.cpp
+	wcl $(CXXFLAGS) $^
+
+pages.exe: examples/pages.cpp hercules/hercules.cpp
+	wcl $(CXXFLAGS) $^
+
+bounce.exe: examples/bounce.cpp hercules/hercules.cpp
+	wcl $(CXXFLAGS) $^
+
+lorenz.exe: ode/lorenz.cpp ode/ode.cpp hercules/hercules.cpp
+	wcl $(CXXFLAGS) $^
+
+# Hercules driver
+
+# hercules.o : hercules/hercules.cpp
+# 	$(CXX) $(CXXFLAGS) -fo=$@ $<
+
+# test.o : hercules/test.cpp
+# 	$(CXX) $(CXXFLAGS) -fo=$@ $<
+
+# test.exe : hercules.o test.o
+# 	$(LD) $(LDFLAGS) $(^:%=file %) name $@
+
+# ODE solving and drawing
+
+# lorenz.exe : hercules.o ode.o lorenz.o
+# 	$(LD) $(LDFLAGS) $(^:%=file %) name $@
+
+# ode.o : ode/ode.cpp
+# 	$(CXX) $(CXXFLAGS) -fo=$@ $<
+
+# lorenz.o : ode/lorenz.cpp
+# 	$(CXX) $(CXXFLAGS) -fo=$@ $<
+
+#%.o : %.cpp
+#	$(CXX) $(CXXFLAGS) -fo=$@ $<
+
+clean :
+	del /q *.obj *.exe *.err
