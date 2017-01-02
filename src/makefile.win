@@ -10,7 +10,7 @@
 #CXX = c:\watcom\binnt\wpp.exe
 CXX = wpp.exe
 LD = wlink.exe
-CXXFLAGS = -0 -bt=dos -bcl=dos -d0 -ms -wx -q -ot -i/opt/watcom/h -l=dos
+CXXFLAGS = -0 -bt=dos -bcl=dos -d0 -ms -wx -q -ot -iC:\watcom\h
 # -wx max warnings level
 # -ms memory model small
 # -bt system
@@ -19,7 +19,7 @@ CXXFLAGS = -0 -bt=dos -bcl=dos -d0 -ms -wx -q -ot -i/opt/watcom/h -l=dos
 # -ot optimization: exec. time
 # -d0 no debuging info
 
-LDFLAGS = option quiet form DOS LIBP /opt/watcom/lib286;/opt/watcom/lib286/dos
+LDFLAGS = option quiet form DOS LIBP C:\watcom\lib286;C:\watcom\lib286\dos
 
 all : lorenz.exe vline.exe pages.exe bounce.exe
 
@@ -45,7 +45,7 @@ lorenz.exe: ode/lorenz.cpp ode/ode.cpp hercules/hercules.cpp
 
 # test.exe : hercules.o test.o
 # 	$(LD) $(LDFLAGS) $(^:%=file %) name $@
- 
+
 # ODE solving and drawing
 
 # lorenz.exe : hercules.o ode.o lorenz.o
@@ -61,4 +61,4 @@ lorenz.exe: ode/lorenz.cpp ode/ode.cpp hercules/hercules.cpp
 #	$(CXX) $(CXXFLAGS) -fo=$@ $<
 
 clean :
-	rm -f *.obj *.exe *.err
+	del /q *.obj *.exe *.err
