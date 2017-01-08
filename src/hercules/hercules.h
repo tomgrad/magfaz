@@ -22,6 +22,7 @@ public:
   uint16 maxy;
 
   Hercules();
+  ~Hercules();
   void initgraph();
   void closegraph();
   void draw_page(int);
@@ -36,6 +37,8 @@ public:
   void circle(const uint16, const uint16, const uint16 r, const bool = 1);
   void line(uint16 x0, uint16 y0, uint16 x1, uint16 y1, const bool = 1);
   void hline(uint16, uint16, uint16, const bool = 1);
+  void text(const char*, const uint8, const uint16=0, const uint16=0, const bool=1);
+  void bitmap(const char*, const uint16, const uint16, const uint16=0, const uint16=0, const bool=1);
 
 private:
   // disable copy ctor, no delete keyword in c++03 :(
@@ -45,6 +48,8 @@ private:
   int page_drawn_no;
   int page_viewed;
   void clear_buffer(addr buf);
+  inline uint16 offset(uint16, uint16) const;
+  char* font;
 };
 
 #endif // HERCULES_H

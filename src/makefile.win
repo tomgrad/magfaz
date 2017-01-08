@@ -21,10 +21,17 @@ CXXFLAGS = -0 -bt=dos -bcl=dos -d0 -ms -wx -q -ot -iC:\watcom\h
 
 LDFLAGS = option quiet form DOS LIBP C:\watcom\lib286;C:\watcom\lib286\dos
 
-all : lorenz.exe vline.exe pages.exe bounce.exe
+all : lorenz.exe vline.exe pages.exe bounce.exe text.exe bitmap.exe
 
 vline.exe: examples/vline.cpp hercules/hercules.cpp
 	wcl $(CXXFLAGS) $^
+
+text.exe: examples/text.cpp hercules/hercules.cpp
+	wcl $(CXXFLAGS) $^
+
+bitmap.exe: examples/bitmap.cpp hercules/hercules.cpp
+	wcl $(CXXFLAGS) $^
+
 
 pages.exe: examples/pages.cpp hercules/hercules.cpp
 	wcl $(CXXFLAGS) $^

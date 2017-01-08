@@ -22,8 +22,8 @@ class Lorenz : public ODE {
 int main() {
   Hercules h;
   Lorenz ode;
-  double x[] = {0.01, 0.01, 0.1};
-  double x1[] = {0.01, 0.01, 0.1}; // save prev. value to draw line
+  double x[] = {8, 12, 18};
+  double x1[] = {8, 12, 18}; // save prev. value to draw line
 
   bool is_running = 1;
   bool color = 1;

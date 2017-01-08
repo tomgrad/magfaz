@@ -1,12 +1,25 @@
 #include "hercules.h"
 #include "../inc/helpers.h" // abs, swap, sgn
-#include <conio.h>          // outp
+// #include "font8x8.h"
+#include <conio.h> // outp
 #include <math.h> // sqrt. Watcom has some stupid problems with std:sqrt from cmath
+#include <stdio.h> // printf
 
 Hercules::Hercules() {
   base = (addr)0xb0000000;
   maxx = 720;
   maxy = 348;
+  font = new char[1024];
+
+  FILE *f = fopen("font8x8.bin", "rb");
+  fread(font, 1, 1024, f);
+  fclose(f);
+}
+
+Hercules::~Hercules() { delete font; }
+
+inline uint16 Hercules::offset(const uint16 x, const uint16 y) const {
+  return ((y & 3) << 13) + (y >> 2) * 90 + (x >> 3);
 }
 
 void Hercules::initgraph() {
@@ -153,7 +166,6 @@ void Hercules::rect(uint16 x, uint16 y, uint16 w, uint16 h, bool c) {
 //   }
 // }
 
-
 // Bresenham's line algorithm
 void Hercules::line(uint16 x, uint16 y, uint16 x1, uint16 y1, const bool c) {
   if (y == y1) {
@@ -208,5 +220,31 @@ void Hercules::circle(const uint16 x0, const uint16 y0, const uint16 radius,
       --x;
       err -= 2 * x + 1;
     }
+  }
+}
+
+void Hercules::text(const char *str, const uint8 len, const uint16 x,
+                    const uint16 y, const bool c) {
+
+  uint16 xmod = x - x % 8; // only full bytes for now
+
+  for (uint8 row = 0; row < 8; ++row) {
+    uint16 off = offset(xmod, y + row);
+
+    for (uint8 i = 0; i < len; ++i)
+      page_drawn[off + i] |= *(font + (str[i] << 3) + row);
+  }
+}
+
+void Hercules::bitmap(const char *data, const uint16 width, const uint16 height,
+                      const uint16 x, const uint16 y, const bool c) {
+  uint16 xmod = x - x % 8; // only full bytes for now
+  char* ptr = (char*)data;
+  uint8 wb = width >> 3;   // width in bytes
+  for (uint16 row = 0; row < height; ++row) {
+    uint16 off = offset(xmod, y + row);
+
+    for (uint8 i = 0; i < wb; ++i)
+      page_drawn[off + i] |= *(ptr++);
   }
 }
